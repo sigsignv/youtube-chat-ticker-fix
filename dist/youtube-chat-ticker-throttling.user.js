@@ -2,7 +2,7 @@
 // @name        Youtube: Chat ticker throttling
 // @description YouTube のチャット欄に表示される Ticker の更新頻度を制限する
 // @namespace   https://github.com/sigsignv/userjs-youtube-chat-ticker-throttling
-// @version     0.1.0
+// @version     0.1.1
 // @author      Sigsign
 // @license     Apache-2.0
 // @match       https://www.youtube.com/live_chat?*
