@@ -1,13 +1,14 @@
 // ==UserScript==
-// @name      Youtube: Chat ticker throttling
-// @namespace https://github.com/sigsignv/userjs-youtube-chat-ticker-throttling
-// @version   0.1.0
-// @author    Sigsign
-// @license   MIT or Apache-2.0
-// @match     https://www.youtube.com/live_chat?*
-// @match     https://www.youtube.com/live_chat_replay?*
-// @run-at    document-start
-// @grant     none
+// @name        Youtube: Chat ticker throttling
+// @description YouTube のチャット欄に表示される Ticker の更新頻度を制限する
+// @namespace   https://github.com/sigsignv/userjs-youtube-chat-ticker-throttling
+// @version     0.1.0
+// @author      Sigsign
+// @license     MIT or Apache-2.0
+// @match       https://www.youtube.com/live_chat?*
+// @match       https://www.youtube.com/live_chat_replay?*
+// @run-at      document-start
+// @grant       none
 // ==/UserScript==
 (function () {
 'use strict';
