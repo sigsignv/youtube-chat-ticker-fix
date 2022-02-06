@@ -1,7 +1,11 @@
-type TickerQueue = Map<number, FrameRequestCallback>
+type TickerQueue = Map<number, [FrameRequestCallback]>
 
 const tickerQueue: TickerQueue = new Map()
 let tickerTimer: number | null = null
+
+const pseudoArgs = [
+    () => {}
+]
 
 window.requestAnimationFrame = new Proxy(window.requestAnimationFrame, {
     apply: function(target, thisArg, argumentsList: [FrameRequestCallback]) {
@@ -13,14 +17,14 @@ window.requestAnimationFrame = new Proxy(window.requestAnimationFrame, {
         }
 
         // Generate pseudo id
-        const id: number = Reflect.apply(target, thisArg, [ () => {} ])
-        tickerQueue.set(id, cb)
+        const id: number = Reflect.apply(target, thisArg, pseudoArgs)
+        tickerQueue.set(id, argumentsList)
 
         // Ticker run at every 2 seconds
         if (tickerTimer === null) {
             tickerTimer = setTimeout(() => {
-                tickerQueue.forEach(async (cb) => {
-                    Reflect.apply(target, thisArg, [cb])
+                tickerQueue.forEach(async (args) => {
+                    Reflect.apply(target, thisArg, args)
                 })
                 tickerQueue.clear()
                 tickerTimer = null
