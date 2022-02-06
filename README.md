@@ -14,7 +14,7 @@ Ticker には表示時間が設定されており、時間経過によって少�
 
 ## Install
 
-[dist/youtube-chat-ticker-throttling.user.js](https://github.com/sigsignv/userjs-youtube-chat-ticker-throttling/raw/main/dist/youtube-chat-ticker-throttling.user.js)
+[dist/youtube-chat-ticker-throttling.user.js](https://github.com/sigsignv/youtube-chat-ticker-fix/raw/main/dist/youtube-chat-ticker-throttling.user.js)
 
 ## Author
 
