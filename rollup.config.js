@@ -5,7 +5,7 @@ export default [
   {
     input: 'src/index.ts',
     output: {
-      file: 'dist/youtube-chat-ticker-throttling.user.js',
+      file: 'dist/youtube-chat-ticker-fix.user.js',
       format: 'iife',
       indent: false,
     },
