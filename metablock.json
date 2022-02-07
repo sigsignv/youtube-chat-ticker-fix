@@ -1,7 +1,7 @@
 {
-  "name": "Youtube: Chat ticker throttling",
-  "description": "YouTube のチャット欄に表示される Ticker の更新頻度を制限する",
-  "namespace": "https://github.com/sigsignv/userjs-youtube-chat-ticker-throttling",
+  "name": "Youtube: Throttle a ticker repainting",
+  "description": "Reduce CPU usage on YouTube Live",
+  "namespace": "https://github.com/sigsignv/youtube-chat-ticker-fix",
   "version": "0.1.2",
   "author": "Sigsign",
   "license": "Apache-2.0",
