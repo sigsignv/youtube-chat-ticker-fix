@@ -3,7 +3,5 @@ updates:
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "daily"
-      time: "12:00"
-      timezone: "Asia/Tokyo"
+      interval: "weekly"
     target-branch: "dev"
