@@ -2,7 +2,8 @@
 // @name        Youtube: Throttle a ticker repainting
 // @description Reduce CPU usage on YouTube Live
 // @namespace   https://github.com/sigsignv/youtube-chat-ticker-fix
-// @version     0.2.0
+// @updateURL   https://github.com/sigsignv/youtube-chat-ticker-fix/raw/main/dist/youtube-chat-ticker-fix.user.js
+// @version     0.2.1
 // @author      Sigsign
 // @license     Apache-2.0
 // @match       https://www.youtube.com/live_chat?*
