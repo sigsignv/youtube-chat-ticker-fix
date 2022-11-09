@@ -1,11 +1,4 @@
-type TickerQueue = Map<number, [FrameRequestCallback]>
-
-const tickerQueue: TickerQueue = new Map()
-let tickerTimer: number | null = null
-
-const pseudoArgs = [
-    () => {}
-]
+const tickerTasks = new Map<number, AbortController>()
 
 window.requestAnimationFrame = new Proxy(window.requestAnimationFrame, {
     apply: function(target, thisArg, argumentsList: [FrameRequestCallback]) {
@@ -16,22 +9,21 @@ window.requestAnimationFrame = new Proxy(window.requestAnimationFrame, {
             return Reflect.apply(target, thisArg, argumentsList)
         }
 
-        // Generate pseudo id
-        const id: number = Reflect.apply(target, thisArg, pseudoArgs)
-        tickerQueue.set(id, argumentsList)
+        // Generate temporary key
+        const key: number = Reflect.apply(target, thisArg, [() => {}])
+        const controller = new AbortController()
 
-        // Ticker run at every 2 seconds
-        if (tickerTimer === null) {
-            tickerTimer = setTimeout(() => {
-                tickerQueue.forEach(async (args) => {
-                    Reflect.apply(target, thisArg, args)
-                })
-                tickerQueue.clear()
-                tickerTimer = null
-            }, 2 * 1000)
-        }
+        // Ticker run after 2 seconds
+        setTimeout((signal: AbortSignal) => {
+            if (!signal.aborted) {
+                const id = Reflect.apply(target, thisArg, argumentsList)
+                signal.addEventListener('abort', () => window.cancelAnimationFrame(id))
+            }
+            setTimeout(() => tickerTasks.delete(key), 1000);
+        }, 2 * 1000, controller.signal)
 
-        return id
+        tickerTasks.set(key, controller)
+        return key
     }
 })
 
@@ -39,8 +31,9 @@ window.cancelAnimationFrame = new Proxy(window.cancelAnimationFrame, {
     apply: function(target, thisArg, argumentsList: [number]) {
         const [ key ] = argumentsList
 
-        if (tickerQueue.delete(key)) {
-            return
+        const abortController = tickerTasks.get(key)
+        if (abortController) {
+            abortController.abort()
         }
         Reflect.apply(target, thisArg, argumentsList)
     }

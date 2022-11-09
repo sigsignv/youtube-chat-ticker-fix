@@ -2,7 +2,7 @@
 // @name        Youtube: Throttle a ticker repainting
 // @description Reduce CPU usage on YouTube Live
 // @namespace   https://github.com/sigsignv/youtube-chat-ticker-fix
-// @version     0.1.3
+// @version     0.2.0
 // @author      Sigsign
 // @license     Apache-2.0
 // @match       https://www.youtube.com/live_chat?*
@@ -13,11 +13,7 @@
 (function () {
 'use strict';
 
-const tickerQueue = new Map();
-let tickerTimer = null;
-const pseudoArgs = [
-    () => { }
-];
+const tickerTasks = new Map();
 window.requestAnimationFrame = new Proxy(window.requestAnimationFrame, {
     apply: function (target, thisArg, argumentsList) {
         const [cb] = argumentsList;
@@ -25,27 +21,27 @@ window.requestAnimationFrame = new Proxy(window.requestAnimationFrame, {
             // Probably not ticker
             return Reflect.apply(target, thisArg, argumentsList);
         }
-        // Generate pseudo id
-        const id = Reflect.apply(target, thisArg, pseudoArgs);
-        tickerQueue.set(id, argumentsList);
-        // Ticker run at every 2 seconds
-        if (tickerTimer === null) {
-            tickerTimer = setTimeout(() => {
-                tickerQueue.forEach(async (args) => {
-                    Reflect.apply(target, thisArg, args);
-                });
-                tickerQueue.clear();
-                tickerTimer = null;
-            }, 2 * 1000);
-        }
-        return id;
+        // Generate temporary key
+        const key = Reflect.apply(target, thisArg, [() => { }]);
+        const controller = new AbortController();
+        // Ticker run after 2 seconds
+        setTimeout((signal) => {
+            if (!signal.aborted) {
+                const id = Reflect.apply(target, thisArg, argumentsList);
+                signal.addEventListener('abort', () => window.cancelAnimationFrame(id));
+            }
+            setTimeout(() => tickerTasks.delete(key), 1000);
+        }, 2 * 1000, controller.signal);
+        tickerTasks.set(key, controller);
+        return key;
     }
 });
 window.cancelAnimationFrame = new Proxy(window.cancelAnimationFrame, {
     apply: function (target, thisArg, argumentsList) {
         const [key] = argumentsList;
-        if (tickerQueue.delete(key)) {
-            return;
+        const abortController = tickerTasks.get(key);
+        if (abortController) {
+            abortController.abort();
         }
         Reflect.apply(target, thisArg, argumentsList);
     }

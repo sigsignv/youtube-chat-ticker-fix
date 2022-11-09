@@ -2,7 +2,7 @@
   "name": "Youtube: Throttle a ticker repainting",
   "description": "Reduce CPU usage on YouTube Live",
   "namespace": "https://github.com/sigsignv/youtube-chat-ticker-fix",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "author": "Sigsign",
   "license": "Apache-2.0",
   "match": [
